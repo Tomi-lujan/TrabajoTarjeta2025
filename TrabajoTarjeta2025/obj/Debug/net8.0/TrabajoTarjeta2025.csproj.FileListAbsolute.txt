@@ -1,0 +1,15 @@
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\bin\Debug\net8.0\TrabajoTarjeta2025.exe
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\bin\Debug\net8.0\TrabajoTarjeta2025.deps.json
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\bin\Debug\net8.0\TrabajoTarjeta2025.runtimeconfig.json
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\bin\Debug\net8.0\TrabajoTarjeta2025.dll
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\bin\Debug\net8.0\TrabajoTarjeta2025.pdb
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net8.0\TrabajoTarjeta2025.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net8.0\TrabajoTarjeta2025.AssemblyInfoInputs.cache
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net8.0\TrabajoTarjeta2025.AssemblyInfo.cs
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net8.0\TrabajoTarjeta2025.csproj.CoreCompileInputs.cache
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net8.0\TrabajoTarjeta2025.sourcelink.json
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net8.0\TrabajoTarjeta2025.dll
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net8.0\refint\TrabajoTarjeta2025.dll
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net8.0\TrabajoTarjeta2025.pdb
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net8.0\TrabajoTarjeta2025.genruntimeconfig.cache
+C:\Users\mg36\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net8.0\ref\TrabajoTarjeta2025.dll
