@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/github/Tomi-lujan/TrabajoTarjeta2025/graph/badge.svg?token=YU0CSCHYMW)](https://codecov.io/github/Tomi-lujan/TrabajoTarjeta2025)
+
 # Trabajo Tarjeta 2025
 
 El siguiente trabajo es un enunciado iterativo. Regularmente se ampliara y/o modificara el enunciado.
