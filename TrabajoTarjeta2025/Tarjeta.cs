@@ -10,6 +10,7 @@ namespace TrabajoTarjeta2025
     {
         public int saldo;
         public int limite;
+        public int limiteMaximo = -1200;
 
         public Tarjeta(int saldo, int limite)
         {
@@ -17,25 +18,22 @@ namespace TrabajoTarjeta2025
             this.limite = limite;
         }
 
-        public int verSaldo()
+        public virtual int verSaldo()
         {
             return saldo;
         }
 
-        public int pagar(int precio)
+        public virtual bool pagar(int precio)
         {
-            if (precio <= saldo)
+            if (saldo - precio < limiteMaximo)
             {
-                saldo -= precio;
-                return saldo;
+                return false;
             }
-            else
-            {
-                return 0; 
-            }
+            saldo -= precio;
+            return true;
         }
 
-        public int recargar(int monto)
+        public virtual int recargar(int monto)
         {
             int[] montosAceptados = { 2000, 3000, 4000, 5000, 8000, 10000, 15000, 20000, 25000, 30000 };
 
@@ -56,4 +54,33 @@ namespace TrabajoTarjeta2025
         }
     }
 
+    public class MedioBoleto : Tarjeta
+    {
+        public MedioBoleto(int saldo, int limite) : base(saldo, limite) { }
+
+        public override bool pagar(int precio)
+        {
+            int precioMedio = precio / 2;
+            return base.pagar(precioMedio);
+        }
+    }
+    public class BoletoGratuito : Tarjeta
+    {
+        public BoletoGratuito(int saldo, int limite) : base(saldo, limite) { }
+
+        public override bool pagar(int precio)
+        {
+            return true;
+        }
+    }
+
+    public class FranquiciaCompleta : Tarjeta
+    {
+        public FranquiciaCompleta(int saldo, int limite) : base(saldo, limite) { }
+
+        public override bool pagar(int precio)
+        {
+            return true;
+        }
+    }
 }
