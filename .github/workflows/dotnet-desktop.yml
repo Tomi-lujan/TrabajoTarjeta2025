@@ -30,18 +30,20 @@ jobs:
     - name: Install coverage tool
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
-    - name: Run tests with coverage
-      run: dotnet test TrabajoTarjeta2025.test/testTrabajoTarjeta2025.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+    # EJECUTAR TESTS CON COBERTURA COMPLETA
+    - name: Run tests with coverage (all projects)
+      run: |
+        dotnet test TrabajoTarjeta2025/TrabajoTarjeta2025.sln --no-build --configuration Release --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults --settings:coverlet.runsettings
+
+    # DEBUG: Verificar archivos de cobertura
+    - name: List coverage files (debug)
+      run: dir TestResults /s
 
     - name: Generate coverage report
-      run: reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:CoverageReport -reporttypes:Html -sourcedirs:TrabajoTarjeta2025,TrabajoTarjeta2025.test
+      run: reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:CoverageReport -reporttypes:Html
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: TestResults/**/coverage.cobertura.xml
-        flags: unittests
-        name: codecov-umbrella
-    - name: List coverage files (debug)
-      run: dir TestResults /s
