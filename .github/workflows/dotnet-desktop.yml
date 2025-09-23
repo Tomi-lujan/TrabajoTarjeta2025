@@ -19,16 +19,16 @@ jobs:
     - name: Setup .NET 8.0
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: 8.0.x
 
     - name: Restore dependencies
-      run: dotnet restore TrabajoTarjeta2025.sln
+      run: dotnet restore TrabajoTarjeta2025/TrabajoTarjeta2025.csproj
 
     - name: Build
-      run: dotnet build TrabajoTarjeta2025.sln --no-restore --configuration Release
+      run: dotnet build TrabajoTarjeta2025/TrabajoTarjeta2025.csproj --no-restore --configuration Release
 
     - name: Run tests with coverage
-      run: dotnet test TrabajoTarjeta2025.sln --no-build --configuration Release --collect:"XPlat Code Coverage"
+      run: dotnet test TrabajoTarjeta2025.test/TrabajoTarjeta2025.test.csproj --no-build --configuration Release --collect:"XPlat Code Coverage"
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
