@@ -9,33 +9,6 @@ on:
       - '**'
 
 jobs:
-
-  build-and-test:
-
-    runs-on: windows-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-   
-    - name: Setup .NET 8.0
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
-
-    - name: Restore dependencies
-      run: dotnet restorename: .NET CI/CD with Code Coverage
-
-on:
-  push:
-    branches:
-      - '**'
-  pull_request:
-    branches:
-      - '**'
-
-jobs:
   build-and-test:
     runs-on: windows-latest
 
@@ -56,19 +29,6 @@ jobs:
 
     - name: Run tests with coverage
       run: dotnet test TrabajoTarjeta2025.sln --no-build --configuration Release --collect:"XPlat Code Coverage"
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: ./**/coverage.cobertura.xml
-
-
-    - name: Build
-      run: dotnet build --no-restore
-
-    - name: Run tests with coverage
-      run: dotnet test --no-build --collect:"XPlat Code Coverage"
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
