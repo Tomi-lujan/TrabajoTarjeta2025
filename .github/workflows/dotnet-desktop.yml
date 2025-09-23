@@ -22,16 +22,16 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore TrabajoTarjeta2025/TrabajoTarjeta2025.sln
 
     - name: Build
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build TrabajoTarjeta2025/TrabajoTarjeta2025.sln --no-restore --configuration Release
 
     - name: Install coverage tool
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
     - name: Run tests with coverage
-      run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults
+      run: dotnet test TrabajoTarjeta2025.test/testTrabajoTarjeta2025.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults
 
     - name: Generate coverage report
       run: reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:CoverageReport -reporttypes:Html
@@ -41,4 +41,3 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: TestResults/**/coverage.cobertura.xml
-        directory: TestResults/
