@@ -31,13 +31,15 @@ jobs:
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
     - name: Run tests with coverage
-      run: dotnet test TrabajoTarjeta2025.test/testTrabajoTarjeta2025.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults
+      run: dotnet test TrabajoTarjeta2025.test/testTrabajoTarjeta2025.csproj --no-build --configuration Release --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
 
     - name: Generate coverage report
-      run: reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:CoverageReport -reporttypes:Html
+      run: reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:CoverageReport -reporttypes:Html -sourcedirs:TrabajoTarjeta2025,TrabajoTarjeta2025.test
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: TestResults/**/coverage.cobertura.xml
+        flags: unittests
+        name: codecov-umbrella
