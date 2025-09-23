@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat code coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+          <Include>[TrabajoTarjeta2025]*,[TrabajoTarjeta2025.test]*</Include>
+          <IncludeDirectory>[TrabajoTarjeta2025],[TrabajoTarjeta2025.test]</IncludeDirectory>
+          <ExcludeByFile>**/bin/**/*,**/obj/**/*,**/TestResults/**/*</ExcludeByFile>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
