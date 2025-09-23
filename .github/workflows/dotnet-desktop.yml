@@ -43,3 +43,5 @@ jobs:
         files: TestResults/**/coverage.cobertura.xml
         flags: unittests
         name: codecov-umbrella
+    - name: List coverage files (debug)
+      run: dir TestResults /s
