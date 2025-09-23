@@ -10,7 +10,7 @@ namespace TrabajoTarjeta2025
     {
         public int saldo;
         public int limite;
-        public int limiteMaximo = -1200;
+        private int limiteMaximo = -1200;
 
         public Tarjeta(int saldo, int limite)
         {
