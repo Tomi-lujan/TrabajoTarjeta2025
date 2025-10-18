@@ -97,8 +97,6 @@ namespace testTrabajoTarjeta2025
             Assert.That(t.verSaldo(), Is.EqualTo(40000));
         }
 
-        // TESTS PARA LAS SUBCLASES:
-
         [Test]
         public void TestMedioBoleto_Pagar()
         {
@@ -142,5 +140,26 @@ namespace testTrabajoTarjeta2025
             Assert.That(tarjetaNueva.verSaldo(), Is.EqualTo(5000));
         }
 
+        [Test]
+        public void Recarga_Que_Supera_Maximo_Acredita_Hasta_Maximo_Y_Deja_Pendiente()
+        {
+            var tarjeta = new Tarjeta(55000, 100000);
+            int resultado = tarjeta.recargar(10000); 
+            Assert.That(resultado, Is.EqualTo(56000));
+            Assert.That(tarjeta.verSaldo(), Is.EqualTo(56000));
+            Assert.That(tarjeta.PendienteAcreditar, Is.EqualTo(9000));
+        }
+
+        [Test]
+        public void Al_Usar_Tarjeta_Se_Acredita_Pendiente_Hasta_Llegar_Al_Maximo()
+        {
+            var tarjeta = new Tarjeta(55000, 100000);
+            tarjeta.recargar(10000); 
+
+            bool pago = tarjeta.pagar(1000);
+            Assert.IsTrue(pago);
+            Assert.That(tarjeta.verSaldo(), Is.EqualTo(56000)); 
+            Assert.That(tarjeta.PendienteAcreditar, Is.EqualTo(8000));
+        }
     }
 }

@@ -12,6 +12,10 @@ namespace TrabajoTarjeta2025
         public int limite;
         private int limiteMaximo = -1200;
 
+        private const int MAX_SALDO = 56000;
+
+        public int PendienteAcreditar { get; private set; } = 0;
+
         public Tarjeta(int saldo, int limite)
         {
             this.saldo = saldo;
@@ -30,6 +34,9 @@ namespace TrabajoTarjeta2025
                 return false;
             }
             saldo -= precio;
+
+            AcreditarCarga();
+
             return true;
         }
 
@@ -42,15 +49,47 @@ namespace TrabajoTarjeta2025
                 return 0;
             }
 
-            if (saldo + monto <= limite)
+            if (saldo + monto <= MAX_SALDO)
             {
                 saldo += monto;
                 return saldo;
             }
             else
             {
+                if (saldo < MAX_SALDO)
+                {
+                    int espacio = MAX_SALDO - saldo;
+                    saldo += espacio;
+                    PendienteAcreditar += monto - espacio; 
+                }
+                else
+                {
+                    PendienteAcreditar += monto;
+                }
+
+                return saldo;
+            }
+        }
+
+        public int AcreditarCarga()
+        {
+            if (PendienteAcreditar <= 0)
+            {
                 return 0;
             }
+
+            if (saldo >= MAX_SALDO)
+            {
+                return 0;
+            }
+
+            int espacio = MAX_SALDO - saldo;
+            int toAcredit = Math.Min(espacio, PendienteAcreditar);
+
+            saldo += toAcredit;
+            PendienteAcreditar -= toAcredit;
+
+            return toAcredit;
         }
     }
 
