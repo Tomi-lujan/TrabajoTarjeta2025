@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-testBoleto",
+      "appliesTo": "TrabajoTarjeta2025.test/testBoleto.cs",
+      "type": "launch"
+    }
+  ]
+}
