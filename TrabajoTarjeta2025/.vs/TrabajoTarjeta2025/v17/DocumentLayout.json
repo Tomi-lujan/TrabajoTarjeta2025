@@ -1,28 +1,31 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\",
+  "WorkspaceRootPath": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{36894B29-3411-47F8-B449-DD726C78B37D}|..\\TrabajoTarjeta2025.test\\testTrabajoTarjeta2025.csproj|c:\\users\\leanz\\onedrive\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025.test\\testtarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{36894B29-3411-47F8-B449-DD726C78B37D}|..\\TrabajoTarjeta2025.test\\testTrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025.test\\testtrabajotarjeta2025.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\boleto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:boleto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\colectivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:colectivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\tarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\leanz\\onedrive\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\tarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:tarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{36894B29-3411-47F8-B449-DD726C78B37D}|..\\TrabajoTarjeta2025.test\\testTrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025.test\\testtarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\leanz\\onedrive\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\boleto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:boleto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{36894B29-3411-47F8-B449-DD726C78B37D}|..\\TrabajoTarjeta2025.test\\testTrabajoTarjeta2025.csproj|c:\\users\\leanz\\onedrive\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025.test\\testboleto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\leanz\\onedrive\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\colectivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:colectivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\leanz\\onedrive\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testTarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -32,80 +35,92 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "testTrabajoTarjeta2025.csproj",
-              "DocumentMoniker": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testTrabajoTarjeta2025.csproj",
-              "RelativeDocumentMoniker": "..\\TrabajoTarjeta2025.test\\testTrabajoTarjeta2025.csproj",
-              "ToolTip": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testTrabajoTarjeta2025.csproj",
-              "RelativeToolTip": "..\\TrabajoTarjeta2025.test\\testTrabajoTarjeta2025.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-09-09T18:15:17.35Z",
+              "DocumentIndex": 3,
+              "Title": "testBoleto.cs",
+              "DocumentMoniker": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testBoleto.cs",
+              "RelativeDocumentMoniker": "..\\TrabajoTarjeta2025.test\\testBoleto.cs",
+              "ToolTip": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testBoleto.cs",
+              "RelativeToolTip": "..\\TrabajoTarjeta2025.test\\testBoleto.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAUwEEAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T19:10:52.085Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "testTarjeta.cs",
+              "DocumentMoniker": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testTarjeta.cs",
+              "RelativeDocumentMoniker": "..\\TrabajoTarjeta2025.test\\testTarjeta.cs",
+              "ToolTip": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testTarjeta.cs",
+              "RelativeToolTip": "..\\TrabajoTarjeta2025.test\\testTarjeta.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAswCgAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-26T18:56:40.784Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Boleto.cs",
-              "DocumentMoniker": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Boleto.cs",
+              "DocumentMoniker": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Boleto.cs",
               "RelativeDocumentMoniker": "Boleto.cs",
-              "ToolTip": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Boleto.cs",
+              "ToolTip": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Boleto.cs",
               "RelativeToolTip": "Boleto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAAmwDMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-09T17:50:13.948Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Colectivo.cs",
-              "DocumentMoniker": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Colectivo.cs",
+              "DocumentMoniker": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Colectivo.cs",
               "RelativeDocumentMoniker": "Colectivo.cs",
-              "ToolTip": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Colectivo.cs",
+              "ToolTip": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Colectivo.cs",
               "RelativeToolTip": "Colectivo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAlwC4AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAADgvxsAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-09T17:48:32.978Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "Tarjeta.cs",
-              "DocumentMoniker": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Tarjeta.cs",
+              "DocumentMoniker": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Tarjeta.cs",
               "RelativeDocumentMoniker": "Tarjeta.cs",
-              "ToolTip": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Tarjeta.cs",
+              "ToolTip": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Tarjeta.cs",
               "RelativeToolTip": "Tarjeta.cs",
-              "ViewState": "AgIAAKcAAAAAAAAAAAAqwLgAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAADIAAAAAAAAAAAAvwEYAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-09T17:33:49.042Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "testTarjeta.cs",
               "DocumentMoniker": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testTarjeta.cs",
-              "RelativeDocumentMoniker": "..\\TrabajoTarjeta2025.test\\testTarjeta.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testTarjeta.cs",
               "ToolTip": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testTarjeta.cs",
-              "RelativeToolTip": "..\\TrabajoTarjeta2025.test\\testTarjeta.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testTarjeta.cs",
               "ViewState": "AgIAABsAAAAAAAAAAAArwCgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-09T17:26:53.922Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-09T17:26:53.922Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Program.cs",
+              "ToolTip": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Program.cs",
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",

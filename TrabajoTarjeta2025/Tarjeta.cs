@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,16 +27,10 @@ namespace TrabajoTarjeta2025
 
         public int PendienteAcreditar { get; private set; } = 0;
 
-<<<<<<< HEAD
         public TarjetaTipo Tipo { get; protected set; } = TarjetaTipo.Normal;
 
-        /// <summary>
-        /// Importe cobrado en la última operación de pago. 0 si fue gratuito o no se cobró.
-        /// </summary>
         public int LastPagoAmount { get; protected set; } = 0;
 
-=======
->>>>>>> ac7766337da967922b1f3735c45af0891c579266
         public Tarjeta(int saldo, int limite)
         {
             Id = _nextId++;
@@ -58,11 +52,8 @@ namespace TrabajoTarjeta2025
             }
             saldo -= precio;
 
-<<<<<<< HEAD
             LastPagoAmount = precio;
 
-=======
->>>>>>> ac7766337da967922b1f3735c45af0891c579266
             AcreditarCarga();
 
             return true;
@@ -88,11 +79,7 @@ namespace TrabajoTarjeta2025
                 {
                     int espacio = MAX_SALDO - saldo;
                     saldo += espacio;
-<<<<<<< HEAD
                     PendienteAcreditar += monto - espacio;
-=======
-                    PendienteAcreditar += monto - espacio; 
->>>>>>> ac7766337da967922b1f3735c45af0891c579266
                 }
                 else
                 {

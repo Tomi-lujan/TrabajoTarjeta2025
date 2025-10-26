@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 namespace TrabajoTarjeta2025
 {
@@ -16,9 +12,12 @@ namespace TrabajoTarjeta2025
             return tarjeta.pagar(DEFAULT_TARIFA);
         }
 
-        // Nuevo método: intenta emitir un boleto y devuelve el objeto Boleto (null si falla el pago)
+        // Emite un boleto (null si falla el pago). Ahora captura saldo previo y pasa IdTarjeta como string.
         public Boleto? EmitirBoleto(Tarjeta tarjeta, int linea, int tarifa = DEFAULT_TARIFA, Func<DateTime>? nowProvider = null)
         {
+            // capturar saldo previo antes del pago
+            int saldoPrevio = tarjeta.verSaldo();
+
             bool pagoExitoso = tarjeta.pagar(tarifa);
             if (!pagoExitoso)
             {
@@ -33,11 +32,12 @@ namespace TrabajoTarjeta2025
             return new Boleto(
                 fecha: fecha,
                 tipoTarjeta: tarjeta.Tipo.ToString(),
-                linea: linea,
+                linea: linea.ToString(),
                 precioNormal: tarifa,
                 totalAbonado: totalAbonado,
+                saldo: saldoPrevio,
                 saldoRestante: saldoRestante,
-                tarjetaId: tarjeta.Id,
+                idTarjeta: tarjeta.Id.ToString(),
                 montoExtra: montoExtra
             );
         }
