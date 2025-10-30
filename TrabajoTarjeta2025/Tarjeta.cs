@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TrabajoTarjeta2025
 {
@@ -21,13 +18,12 @@ namespace TrabajoTarjeta2025
         public int Id { get; }
         protected int saldo;
         public int limite;
-        private int limiteMaximo = -1200;
+        private readonly int limiteMaximo = -1200;
 
         private const int MAX_SALDO = 56000;
 
         public int PendienteAcreditar { get; private set; } = 0;
 
-<<<<<<< HEAD
         public TarjetaTipo Tipo { get; protected set; } = TarjetaTipo.Normal;
 
         /// <summary>
@@ -35,19 +31,83 @@ namespace TrabajoTarjeta2025
         /// </summary>
         public int LastPagoAmount { get; protected set; } = 0;
 
-=======
->>>>>>> ac7766337da967922b1f3735c45af0891c579266
+        public DateTime? LastPagoTime { get; protected set; } = null;
+
+        // Contadores para beneficio de uso frecuente (solo para tarjetas normales).
+        private int viajesMesActual = 0;
+        private int mesRef = 0;
+        private int anioRef = 0;
+
+        // Trasbordo: ventana iniciada (desde primer boleto pagado) y línea base
+        public DateTime? TransferWindowStart { get; internal set; } = null;
+        public int? TransferBaseLine { get; internal set; } = null;
+
         public Tarjeta(int saldo, int limite)
         {
             Id = _nextId++;
             this.saldo = saldo;
             this.limite = limite;
+            var now = DateTime.Now;
+            mesRef = now.Month;
+            anioRef = now.Year;
         }
+
+        // Permite construirse pasando decimales desde tests que usan sufijo m
+        public Tarjeta(decimal saldo, decimal limite) : this((int)saldo, (int)limite) { }
 
         public virtual int verSaldo()
         {
             return saldo;
         }
+
+        protected void ActualizarMesSiCorresponde(DateTime now)
+        {
+            if (now.Month != mesRef || now.Year != anioRef)
+            {
+                viajesMesActual = 0;
+                mesRef = now.Month;
+                anioRef = now.Year;
+            }
+        }
+
+        /// <summary>
+        /// Calcula la tarifa aplicando el descuento de uso frecuente si corresponde (solo tarjetas normales).
+        /// Incrementa el contador mensual de viajes (el descuento se basa en el número de viaje).
+        /// Devuelve entero (pesos).
+        /// </summary>
+        public int CalcularTarifaConDescuento(int tarifa, DateTime now)
+        {
+            if (Tipo != TarjetaTipo.Normal)
+            {
+                // No aplica beneficio: no contamos viajes para este beneficio
+                return tarifa;
+            }
+
+            ActualizarMesSiCorresponde(now);
+
+            // Se considera el número de viaje actual (incrementamos antes de calcular la franja)
+            viajesMesActual++;
+            int nroViaje = viajesMesActual;
+
+            if (nroViaje >= 30 && nroViaje <= 59)
+            {
+                // 20% de descuento
+                return (tarifa * 80) / 100;
+            }
+            else if (nroViaje >= 60 && nroViaje <= 80)
+            {
+                // 25% de descuento
+                return (tarifa * 75) / 100;
+            }
+            else
+            {
+                // fuera de tramos -> tarifa normal
+                return tarifa;
+            }
+        }
+
+        // Sobrecarga que recibe decimal desde tests si ocurriera
+        public int CalcularTarifaConDescuento(decimal tarifa, DateTime now) => CalcularTarifaConDescuento((int)tarifa, now);
 
         public virtual bool pagar(int precio)
         {
@@ -56,17 +116,18 @@ namespace TrabajoTarjeta2025
                 LastPagoAmount = 0;
                 return false;
             }
+
             saldo -= precio;
-
-<<<<<<< HEAD
             LastPagoAmount = precio;
+            LastPagoTime = DateTime.Now;
 
-=======
->>>>>>> ac7766337da967922b1f3735c45af0891c579266
             AcreditarCarga();
 
             return true;
         }
+
+        // Sobrecarga para aceptar decimal en llamadas (casts al entero)
+        public bool pagar(decimal precio) => pagar((int)precio);
 
         public virtual int recargar(int monto)
         {
@@ -88,11 +149,7 @@ namespace TrabajoTarjeta2025
                 {
                     int espacio = MAX_SALDO - saldo;
                     saldo += espacio;
-<<<<<<< HEAD
                     PendienteAcreditar += monto - espacio;
-=======
-                    PendienteAcreditar += monto - espacio; 
->>>>>>> ac7766337da967922b1f3735c45af0891c579266
                 }
                 else
                 {
@@ -102,6 +159,9 @@ namespace TrabajoTarjeta2025
                 return saldo;
             }
         }
+
+        // Sobrecarga decimal
+        public int recargar(decimal monto) => recargar((int)monto);
 
         public int AcreditarCarga()
         {
@@ -137,9 +197,12 @@ namespace TrabajoTarjeta2025
             Tipo = TarjetaTipo.Medio;
             ultimoUso = DateTime.MinValue;
             viajesDiarios = 0;
-            fechaActual = (nowProvider ?? (() => DateTime.Now))().Date;
             _now = nowProvider ?? (() => DateTime.Now);
+            fechaActual = _now().Date;
         }
+
+        // Constructor decimal-friendly
+        public MedioBoleto(decimal saldo, decimal limite, Func<DateTime>? nowProvider = null) : this((int)saldo, (int)limite, nowProvider) { }
 
         public override bool pagar(int precio)
         {
@@ -174,8 +237,11 @@ namespace TrabajoTarjeta2025
             viajesDiarios++;
             ultimoUso = now;
             int precioMedio = precio / 2;
-            return base.pagar(precioMedio);
+            bool r = base.pagar(precioMedio);
+            return r;
         }
+
+        public override bool pagar(decimal precio) => pagar((int)precio);
     }
 
     public class BoletoGratuito : Tarjeta
@@ -188,9 +254,11 @@ namespace TrabajoTarjeta2025
         {
             Tipo = TarjetaTipo.Educativo;
             viajesGratuitosDiarios = 0;
-            fechaActual = (nowProvider ?? (() => DateTime.Now))().Date;
             _now = nowProvider ?? (() => DateTime.Now);
+            fechaActual = _now().Date;
         }
+
+        public BoletoGratuito(decimal saldo, decimal limite, Func<DateTime>? nowProvider = null) : this((int)saldo, (int)limite, nowProvider) { }
 
         public override bool pagar(int precio)
         {
@@ -211,8 +279,11 @@ namespace TrabajoTarjeta2025
 
             viajesGratuitosDiarios++;
             LastPagoAmount = 0;
+            LastPagoTime = now;
             return true;
         }
+
+        public override bool pagar(decimal precio) => pagar((int)precio);
     }
 
     public class FranquiciaCompleta : Tarjeta
@@ -222,10 +293,15 @@ namespace TrabajoTarjeta2025
             Tipo = TarjetaTipo.FranquiciaCompleta;
         }
 
+        public FranquiciaCompleta(decimal saldo, decimal limite) : this((int)saldo, (int)limite) { }
+
         public override bool pagar(int precio)
         {
             LastPagoAmount = 0;
+            LastPagoTime = DateTime.Now;
             return true;
         }
+
+        public override bool pagar(decimal precio) => pagar((int)precio);
     }
 }

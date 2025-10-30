@@ -4,7 +4,8 @@ using TrabajoTarjeta2025;
 
 namespace testTrabajoTarjeta2025
 {
-    public class Tests
+    [TestFixture]
+    public class TarjetaTests
     {
         public Tarjeta t;
 
@@ -36,15 +37,15 @@ namespace testTrabajoTarjeta2025
         {
             t = new Tarjeta(39000, 40000);
             int resultado = t.recargar(3000);
-            Assert.That(resultado, Is.EqualTo(39000)); // recargar no excede MAX_SALDO: mantiene saldo y PendienteAcreditar
-            Assert.That(t.verSaldo(), Is.EqualTo(39000));
+            Assert.That(resultado, Is.EqualTo(42000)); // recargar no excede MAX_SALDO: mantiene saldo y PendienteAcreditar
+            Assert.That(t.verSaldo(), Is.EqualTo(42000));
         }
 
         [Test]
         public void TestPagar_SaldoSuficiente()
         {
             bool resultado = t.pagar(5000);
-            Assert.IsTrue(resultado);
+            Assert.That(resultado, Is.True);
             Assert.That(t.verSaldo(), Is.EqualTo(5000)); // 10000 - 5000
         }
 
@@ -53,7 +54,7 @@ namespace testTrabajoTarjeta2025
         {
             t = new Tarjeta(1000, 40000); // Saldo bajo
             bool resultado = t.pagar(3000); // Intenta pagar más del saldo + límite
-            Assert.IsFalse(resultado);
+            Assert.That(resultado, Is.False);
             Assert.That(t.verSaldo(), Is.EqualTo(1000)); // Saldo no cambia
         }
 
@@ -62,7 +63,7 @@ namespace testTrabajoTarjeta2025
         {
             t = new Tarjeta(1000, 40000);
             bool resultado = t.pagar(2200); // 1000 - 2200 = -1200 (justo en el límite)
-            Assert.IsTrue(resultado);
+            Assert.That(resultado, Is.True);
             Assert.That(t.verSaldo(), Is.EqualTo(-1200));
         }
 
@@ -100,7 +101,7 @@ namespace testTrabajoTarjeta2025
         {
             var medioBoleto = new MedioBoleto(10000, 40000);
             bool resultado = medioBoleto.pagar(2000); // Debería cobrar la mitad: 1000
-            Assert.IsTrue(resultado);
+            Assert.That(resultado, Is.True);
             Assert.That(medioBoleto.verSaldo(), Is.EqualTo(9000)); // 10000 - 1000
         }
 
@@ -109,7 +110,7 @@ namespace testTrabajoTarjeta2025
         {
             var boletoGratuito = new BoletoGratuito(10000, 40000);
             bool resultado = boletoGratuito.pagar(5000);
-            Assert.IsTrue(resultado);
+            Assert.That(resultado, Is.True);
             Assert.That(boletoGratuito.verSaldo(), Is.EqualTo(10000)); // Saldo no cambia
         }
 
@@ -118,7 +119,7 @@ namespace testTrabajoTarjeta2025
         {
             var franquicia = new FranquiciaCompleta(10000, 40000);
             bool resultado = franquicia.pagar(5000);
-            Assert.IsTrue(resultado);
+            Assert.That(resultado, Is.True);
             Assert.That(franquicia.verSaldo(), Is.EqualTo(10000)); // Saldo no cambia
         }
 
@@ -127,7 +128,7 @@ namespace testTrabajoTarjeta2025
         {
             var medioBoleto = new MedioBoleto(10000, 40000);
             bool resultado = medioBoleto.pagar(3000); // 3000 / 2 = 1500
-            Assert.IsTrue(resultado);
+            Assert.That(resultado, Is.True);
             Assert.That(medioBoleto.verSaldo(), Is.EqualTo(8500)); // 10000 - 1500
         }
 
@@ -138,7 +139,6 @@ namespace testTrabajoTarjeta2025
             Assert.That(tarjetaNueva.verSaldo(), Is.EqualTo(5000));
         }
 
-<<<<<<< HEAD
         // NUEVOS TESTS PARA REGLAS TEMPORALES Y BOLETOS:
 
         [Test]
@@ -149,11 +149,11 @@ namespace testTrabajoTarjeta2025
             var medio = new MedioBoleto(10000, 40000, clock);
 
             bool r1 = medio.pagar(1580);
-            Assert.IsTrue(r1);
+            Assert.That(r1, Is.True);
             // Avanzamos 3 minutos: menos de 5 => no se permite
             current = current.AddMinutes(3);
             bool r2 = medio.pagar(1580);
-            Assert.IsFalse(r2);
+            Assert.That(r2, Is.False);
         }
 
         [Test]
@@ -165,17 +165,17 @@ namespace testTrabajoTarjeta2025
 
             // Primer viaje
             bool v1 = medio.pagar(1580); // cobra 790
-            Assert.IsTrue(v1);
+            Assert.That(v1, Is.True);
             current = current.AddMinutes(6); // >5 minutos
 
             // Segundo viaje
             bool v2 = medio.pagar(1580); // cobra 790
-            Assert.IsTrue(v2);
+            Assert.That(v2, Is.True);
             current = current.AddMinutes(6); // >5 minutos
 
             // Tercer viaje del mismo día -> cobra tarifa completa 1580
             bool v3 = medio.pagar(1580);
-            Assert.IsTrue(v3);
+            Assert.That(v3, Is.True);
 
             int esperado = 10000 - 790 - 790 - 1580; // 10000 - 3160 = 6840
             Assert.That(medio.verSaldo(), Is.EqualTo(esperado));
@@ -189,14 +189,14 @@ namespace testTrabajoTarjeta2025
             var gratuito = new BoletoGratuito(10000, 40000, clock);
 
             // Dos viajes gratuitos
-            Assert.IsTrue(gratuito.pagar(1580));
+            Assert.That(gratuito.pagar(1580), Is.True);
             current = current.AddMinutes(10);
-            Assert.IsTrue(gratuito.pagar(1580));
+            Assert.That(gratuito.pagar(1580), Is.True);
             current = current.AddMinutes(10);
 
             // Tercer viaje: debe cobrarse tarifa completa
             bool t3 = gratuito.pagar(1580);
-            Assert.IsTrue(t3);
+            Assert.That(t3, Is.True);
             Assert.That(gratuito.verSaldo(), Is.EqualTo(10000 - 1580));
         }
 
@@ -211,20 +211,21 @@ namespace testTrabajoTarjeta2025
             // Emitir boleto mediante el colectivo (usa tarifa por defecto 1580)
             Boleto? b = colectivo.EmitirBoleto(tarjeta, linea: 123, tarifa: 1580, nowProvider: clock);
 
-            Assert.IsNotNull(b);
-            Assert.That(b!.Linea, Is.EqualTo(123));
-            Assert.That(b.PrecioNormal, Is.EqualTo(1580));
-            Assert.That(b.TotalAbonado, Is.EqualTo(tarjeta.LastPagoAmount));
-            Assert.That(b.SaldoRestante, Is.EqualTo(tarjeta.verSaldo()));
+            Assert.That(b, Is.Not.Null);
+            Assert.That(int.Parse(b!.Linea), Is.EqualTo(123));
+            Assert.That(b.PrecioNormal, Is.EqualTo((decimal)1580));
+            Assert.That(b.TotalAbonado, Is.EqualTo((decimal)tarjeta.LastPagoAmount));
+            Assert.That(b.SaldoRestante, Is.EqualTo((decimal)tarjeta.verSaldo()));
             Assert.That(b.Fecha, Is.EqualTo(current));
             Assert.That(b.TipoTarjeta, Is.EqualTo(tarjeta.Tipo.ToString()));
-            Assert.That(b.TarjetaId, Is.EqualTo(tarjeta.Id));
-=======
+            Assert.That(int.Parse(b.IdTarjeta), Is.EqualTo(tarjeta.Id));
+        }
+
         [Test]
         public void Recarga_Que_Supera_Maximo_Acredita_Hasta_Maximo_Y_Deja_Pendiente()
         {
             var tarjeta = new Tarjeta(55000, 100000);
-            int resultado = tarjeta.recargar(10000); 
+            int resultado = tarjeta.recargar(10000);
             Assert.That(resultado, Is.EqualTo(56000));
             Assert.That(tarjeta.verSaldo(), Is.EqualTo(56000));
             Assert.That(tarjeta.PendienteAcreditar, Is.EqualTo(9000));
@@ -234,13 +235,143 @@ namespace testTrabajoTarjeta2025
         public void Al_Usar_Tarjeta_Se_Acredita_Pendiente_Hasta_Llegar_Al_Maximo()
         {
             var tarjeta = new Tarjeta(55000, 100000);
-            tarjeta.recargar(10000); 
+            tarjeta.recargar(10000);
 
             bool pago = tarjeta.pagar(1000);
-            Assert.IsTrue(pago);
-            Assert.That(tarjeta.verSaldo(), Is.EqualTo(56000)); 
+            Assert.That(pago, Is.True);
+            Assert.That(tarjeta.verSaldo(), Is.EqualTo(56000));
             Assert.That(tarjeta.PendienteAcreditar, Is.EqualTo(8000));
->>>>>>> ac7766337da967922b1f3735c45af0891c579266
+        }
+
+        [Test]
+        public void TestUsoFrecuente_Tramo30_20porciento()
+        {
+            var colectivo = new Colectivo();
+            DateTime now = new DateTime(2025, 10, 1, 9, 0, 0);
+            Func<DateTime> clock = () => now;
+
+            var tarjeta = new Tarjeta(100000m, 200000m);
+
+            // realizar 29 viajes (sin verificar retornos)
+            for (int i = 1; i <= 29; i++)
+            {
+                var b = colectivo.EmitirBoleto(tarjeta, linea: i, tarifa: 1000m, nowProvider: clock);
+                Assert.IsNotNull(b);
+                // los primeros 29 no tienen descuento => total abonado 1000
+                Assert.That(b!.TotalAbonado, Is.EqualTo(1000m));
+            }
+
+            // viaje 30 => 20% de descuento => 800
+            var b30 = colectivo.EmitirBoleto(tarjeta, linea: 999, tarifa: 1000m, nowProvider: clock);
+            Assert.IsNotNull(b30);
+            Assert.That(b30!.TotalAbonado, Is.EqualTo(800m));
+        }
+
+        [Test]
+        public void TestUsoFrecuente_Tramo60_25porciento()
+        {
+            var colectivo = new Colectivo();
+            DateTime now = new DateTime(2025, 10, 1, 9, 0, 0);
+            Func<DateTime> clock = () => now;
+
+            var tarjeta = new Tarjeta(100000m, 200000m);
+
+            // 59 viajes para llegar al 60 luego
+            for (int i = 1; i <= 59; i++)
+            {
+                var b = colectivo.EmitirBoleto(tarjeta, linea: i, tarifa: 1000m, nowProvider: clock);
+                Assert.IsNotNull(b);
+            }
+
+            // viaje 60 => 25% de descuento => 750
+            var b60 = colectivo.EmitirBoleto(tarjeta, linea: 1000, tarifa: 1000m, nowProvider: clock);
+            Assert.IsNotNull(b60);
+            Assert.That(b60!.TotalAbonado, Is.EqualTo(750m));
+        }
+
+        [Test]
+        public void TestUsoFrecuente_Tramo81_VuelveNormal()
+        {
+            var colectivo = new Colectivo();
+            DateTime now = new DateTime(2025, 10, 1, 9, 0, 0);
+            Func<DateTime> clock = () => now;
+
+            var tarjeta = new Tarjeta(100000m, 200000m);
+
+            // 80 viajes
+            for (int i = 1; i <= 80; i++)
+            {
+                var b = colectivo.EmitirBoleto(tarjeta, linea: i, tarifa: 1000m, nowProvider: clock);
+                Assert.IsNotNull(b);
+            }
+
+            // viaje 81 => vuelve a tarifa normal => 1000
+            var b81 = colectivo.EmitirBoleto(tarjeta, linea: 1001, tarifa: 1000m, nowProvider: clock);
+            Assert.IsNotNull(b81);
+            Assert.That(b81!.TotalAbonado, Is.EqualTo(1000m));
+        }
+
+        [Test]
+        public void TestTrasbordo_Libre_EnUnaHora_LineasDistintas_HorarioPermitido()
+        {
+            DateTime current = new DateTime(2025, 10, 13, 10, 0, 0); // Lunes
+            Func<DateTime> clock = () => current;
+            var colectivo = new Colectivo();
+            var tarjeta = new Tarjeta(100000m, 200000m);
+
+            // primer boleto: linea 1 -> paga
+            var b1 = colectivo.EmitirBoleto(tarjeta, linea: 1, tarifa: 1000m, nowProvider: clock);
+            Assert.IsNotNull(b1);
+            Assert.That(b1!.TotalAbonado, Is.EqualTo(1000m));
+
+            // avanzar 30 minutos, otra linea distinta -> trasbordo libre
+            current = current.AddMinutes(30);
+            var b2 = colectivo.EmitirBoleto(tarjeta, linea: 2, tarifa: 1000m, nowProvider: clock);
+            Assert.IsNotNull(b2);
+            Assert.That(b2!.IsTrasbordo, Is.True);
+            Assert.That(b2.TotalAbonado, Is.EqualTo(0m));
+            Assert.That(b2.TrasbordoPagado, Is.False);
+        }
+
+        [Test]
+        public void TestTrasbordo_MismoLinea_NoEsLibre()
+        {
+            DateTime current = new DateTime(2025, 10, 13, 11, 0, 0); // Lunes
+            Func<DateTime> clock = () => current;
+            var colectivo = new Colectivo();
+            var tarjeta = new Tarjeta(100000m, 200000m);
+
+            var b1 = colectivo.EmitirBoleto(tarjeta, linea: 5, tarifa: 1000m, nowProvider: clock);
+            Assert.IsNotNull(b1);
+            Assert.That(b1!.TotalAbonado, Is.EqualTo(1000m));
+
+            current = current.AddMinutes(20);
+            var b2 = colectivo.EmitirBoleto(tarjeta, linea: 5, tarifa: 1000m, nowProvider: clock);
+            Assert.IsNotNull(b2);
+            // mismo line => no es trasbordo libre
+            Assert.That(b2.IsTrasbordo, Is.False);
+            Assert.That(b2.TotalAbonado, Is.EqualTo(1000m));
+            Assert.That(b2.TrasbordoPagado, Is.False);
+        }
+
+        [Test]
+        public void TestTrasbordo_FueraHorario_NoEsLibre()
+        {
+            DateTime current = new DateTime(2025, 10, 12, 10, 0, 0); // Domingo
+            Func<DateTime> clock = () => current;
+            var colectivo = new Colectivo();
+            var tarjeta = new Tarjeta(100000m, 200000m);
+
+            var b1 = colectivo.EmitirBoleto(tarjeta, linea: 10, tarifa: 1000m, nowProvider: clock);
+            Assert.IsNotNull(b1);
+            Assert.That(b1!.TotalAbonado, Is.EqualTo(1000m));
+
+            current = current.AddMinutes(30);
+            var b2 = colectivo.EmitirBoleto(tarjeta, linea: 11, tarifa: 1000m, nowProvider: clock);
+            Assert.IsNotNull(b2);
+            // Domingo -> no libre
+            Assert.That(b2.IsTrasbordo, Is.False);
+            Assert.That(b2.TotalAbonado, Is.EqualTo(1000m));
         }
     }
 }

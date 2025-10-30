@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TrabajoTarjeta2025
 {
@@ -16,31 +12,98 @@ namespace TrabajoTarjeta2025
             return tarjeta.pagar(DEFAULT_TARIFA);
         }
 
-        // Nuevo método: intenta emitir un boleto y devuelve el objeto Boleto (null si falla el pago)
+        // EmitirBoleto con tarifa entera
         public Boleto? EmitirBoleto(Tarjeta tarjeta, int linea, int tarifa = DEFAULT_TARIFA, Func<DateTime>? nowProvider = null)
         {
-            bool pagoExitoso = tarjeta.pagar(tarifa);
-            if (!pagoExitoso)
+            DateTime now = (nowProvider ?? (() => DateTime.Now))();
+
+            bool esTrasbordo = false;
+            bool trasbordoPagado = false;
+            int montoCobrado = 0;
+
+            // Verificar si existe ventana de trasbordo activa para la tarjeta
+            bool ventanaActiva = tarjeta.TransferWindowStart.HasValue &&
+                                 (now - tarjeta.TransferWindowStart.Value).TotalHours <= 1.0;
+
+            bool horarioPermitido = IsHorarioTrasbordoPermitido(now);
+
+            if (ventanaActiva && horarioPermitido && tarjeta.TransferBaseLine.HasValue && tarjeta.TransferBaseLine.Value != linea)
             {
-                return null;
+                // Trasbordo libre: monto 0
+                esTrasbordo = true;
+                // Aún así respetamos reglas de la tarjeta (por ejemplo medio boleto 5 minutos)
+                bool res = tarjeta.pagar(0);
+                if (!res)
+                {
+                    return null;
+                }
+                montoCobrado = tarjeta.LastPagoAmount;
+                trasbordoPagado = montoCobrado > 0;
+            }
+            else
+            {
+                // No es trasbordo libre: calcular monto según tipo y beneficios de uso frecuente (solo tarjetas normales)
+                if (tarjeta.Tipo == TarjetaTipo.Normal)
+                {
+                    int montoConDescuento = tarjeta.CalcularTarifaConDescuento(tarifa, now);
+                    bool pagoOk = tarjeta.pagar(montoConDescuento);
+                    if (!pagoOk)
+                    {
+                        return null;
+                    }
+                    montoCobrado = tarjeta.LastPagoAmount;
+                }
+                else
+                {
+                    // Para otras tarjetas delegamos en su pagar (MedioBoleto, Gratuito, FranquiciaCompleta)
+                    bool pagoOk = tarjeta.pagar(tarifa);
+                    if (!pagoOk)
+                    {
+                        return null;
+                    }
+                    montoCobrado = tarjeta.LastPagoAmount;
+                }
+
+                // Abrir o reiniciar ventana de trasbordo desde este boleto si se pagó (montoCobrado > 0)
+                if (montoCobrado > 0)
+                {
+                    tarjeta.TransferWindowStart = now;
+                    tarjeta.TransferBaseLine = linea;
+                }
             }
 
-            DateTime fecha = (nowProvider ?? (() => DateTime.Now))();
-            int totalAbonado = tarjeta.LastPagoAmount;
-            int saldoRestante = tarjeta.verSaldo();
-            int montoExtra = Math.Max(0, totalAbonado - tarifa);
+            int montoExtra = Math.Max(0, montoCobrado - tarifa);
 
-            return new Boleto(
-                fecha: fecha,
+            // Construir boleto con la info pedida (Linea e Id como strings para compatibilidad con tests)
+            var boleto = new Boleto(
+                fecha: now,
                 tipoTarjeta: tarjeta.Tipo.ToString(),
-                linea: linea,
+                linea: linea.ToString(),
                 precioNormal: tarifa,
-                totalAbonado: totalAbonado,
-                saldoRestante: saldoRestante,
-                tarjetaId: tarjeta.Id,
-                montoExtra: montoExtra
+                totalAbonado: montoCobrado,
+                saldoPrevio: 0, // no requerido aquí
+                saldoRestante: tarjeta.verSaldo(),
+                idTarjeta: tarjeta.Id.ToString(),
+                montoExtra: montoExtra,
+                esTrasbordo: esTrasbordo,
+                trasbordoPagado: trasbordoPagado
             );
+
+            return boleto;
+        }
+
+        // Sobrecarga para aceptar decimal tarifa en tests si fuese llamado así
+        public Boleto? EmitirBoleto(Tarjeta tarjeta, int linea, decimal tarifa, Func<DateTime>? nowProvider = null)
+            => EmitirBoleto(tarjeta, linea, (int)tarifa, nowProvider);
+
+        private bool IsHorarioTrasbordoPermitido(DateTime now)
+        {
+            // Trasbordos se pueden realizar de lunes a sábado de 7:00 a 22:00.
+            DayOfWeek d = now.DayOfWeek;
+            bool diaValido = d >= DayOfWeek.Monday && d <= DayOfWeek.Saturday;
+            TimeSpan t = now.TimeOfDay;
+            bool horaValida = t >= TimeSpan.FromHours(7) && t < TimeSpan.FromHours(22);
+            return diaValido && horaValida;
         }
     }
 }
-
