@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\TrabajoTarjeta2025.csproj": {}
+    "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\TrabajoTarjeta2025.csproj": {}
   },
   "projects": {
-    "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\TrabajoTarjeta2025.csproj": {
+    "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\TrabajoTarjeta2025.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\TrabajoTarjeta2025.csproj",
+        "projectUniqueName": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\TrabajoTarjeta2025.csproj",
         "projectName": "TrabajoTarjeta2025",
-        "projectPath": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\TrabajoTarjeta2025.csproj",
-        "packagesPath": "C:\\Users\\leanz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\leanz\\OneDrive\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\obj\\",
+        "projectPath": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\TrabajoTarjeta2025.csproj",
+        "packagesPath": "C:\\Users\\mg36\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\leanz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mg36\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -65,7 +65,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
