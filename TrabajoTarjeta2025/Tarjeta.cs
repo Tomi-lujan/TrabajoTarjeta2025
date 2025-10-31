@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 namespace TrabajoTarjeta2025
@@ -16,20 +16,20 @@ namespace TrabajoTarjeta2025
         private static int _nextId = 1;
 
         public int Id { get; }
-        protected int saldo;
-        public int limite;
-        private readonly int limiteMaximo = -1200;
+        protected decimal saldo;
+        public decimal limite;
+        private readonly decimal limiteMaximo = -1200m;
 
-        private const int MAX_SALDO = 56000;
+        private const decimal MAX_SALDO = 56000m;
 
-        public int PendienteAcreditar { get; private set; } = 0;
+        public decimal PendienteAcreditar { get; private set; } = 0m;
 
         public TarjetaTipo Tipo { get; protected set; } = TarjetaTipo.Normal;
 
         /// <summary>
         /// Importe cobrado en la última operación de pago. 0 si fue gratuito o no se cobró.
         /// </summary>
-        public int LastPagoAmount { get; protected set; } = 0;
+        public decimal LastPagoAmount { get; protected set; } = 0m;
 
         public DateTime? LastPagoTime { get; protected set; } = null;
 
@@ -42,7 +42,7 @@ namespace TrabajoTarjeta2025
         public DateTime? TransferWindowStart { get; internal set; } = null;
         public int? TransferBaseLine { get; internal set; } = null;
 
-        public Tarjeta(int saldo, int limite)
+        public Tarjeta(decimal saldo, decimal limite)
         {
             Id = _nextId++;
             this.saldo = saldo;
@@ -52,10 +52,7 @@ namespace TrabajoTarjeta2025
             anioRef = now.Year;
         }
 
-        // Permite construirse pasando decimales desde tests que usan sufijo m
-        public Tarjeta(decimal saldo, decimal limite) : this((int)saldo, (int)limite) { }
-
-        public virtual int verSaldo()
+        public virtual decimal verSaldo()
         {
             return saldo;
         }
@@ -73,9 +70,8 @@ namespace TrabajoTarjeta2025
         /// <summary>
         /// Calcula la tarifa aplicando el descuento de uso frecuente si corresponde (solo tarjetas normales).
         /// Incrementa el contador mensual de viajes (el descuento se basa en el número de viaje).
-        /// Devuelve entero (pesos).
         /// </summary>
-        public int CalcularTarifaConDescuento(int tarifa, DateTime now)
+        public decimal CalcularTarifaConDescuento(decimal tarifa, DateTime now)
         {
             if (Tipo != TarjetaTipo.Normal)
             {
@@ -92,12 +88,12 @@ namespace TrabajoTarjeta2025
             if (nroViaje >= 30 && nroViaje <= 59)
             {
                 // 20% de descuento
-                return (tarifa * 80) / 100;
+                return Math.Floor((tarifa * 80m) / 100m);
             }
             else if (nroViaje >= 60 && nroViaje <= 80)
             {
                 // 25% de descuento
-                return (tarifa * 75) / 100;
+                return Math.Floor((tarifa * 75m) / 100m);
             }
             else
             {
@@ -106,14 +102,11 @@ namespace TrabajoTarjeta2025
             }
         }
 
-        // Sobrecarga que recibe decimal desde tests si ocurriera
-        public int CalcularTarifaConDescuento(decimal tarifa, DateTime now) => CalcularTarifaConDescuento((int)tarifa, now);
-
-        public virtual bool pagar(int precio)
+        public virtual bool pagar(decimal precio)
         {
             if (saldo - precio < limiteMaximo)
             {
-                LastPagoAmount = 0;
+                LastPagoAmount = 0m;
                 return false;
             }
 
@@ -126,16 +119,13 @@ namespace TrabajoTarjeta2025
             return true;
         }
 
-        // Sobrecarga para aceptar decimal en llamadas (casts al entero)
-        public bool pagar(decimal precio) => pagar((int)precio);
-
-        public virtual int recargar(int monto)
+        public virtual decimal recargar(decimal monto)
         {
-            int[] montosAceptados = { 2000, 3000, 4000, 5000, 8000, 10000, 15000, 20000, 25000, 30000 };
+            decimal[] montosAceptados = { 2000m, 3000m, 4000m, 5000m, 8000m, 10000m, 15000m, 20000m, 25000m, 30000m };
 
             if (!montosAceptados.Contains(monto))
             {
-                return 0;
+                return 0m;
             }
 
             if (saldo + monto <= MAX_SALDO)
@@ -147,7 +137,7 @@ namespace TrabajoTarjeta2025
             {
                 if (saldo < MAX_SALDO)
                 {
-                    int espacio = MAX_SALDO - saldo;
+                    decimal espacio = MAX_SALDO - saldo;
                     saldo += espacio;
                     PendienteAcreditar += monto - espacio;
                 }
@@ -160,23 +150,20 @@ namespace TrabajoTarjeta2025
             }
         }
 
-        // Sobrecarga decimal
-        public int recargar(decimal monto) => recargar((int)monto);
-
-        public int AcreditarCarga()
+        public decimal AcreditarCarga()
         {
-            if (PendienteAcreditar <= 0)
+            if (PendienteAcreditar <= 0m)
             {
-                return 0;
+                return 0m;
             }
 
             if (saldo >= MAX_SALDO)
             {
-                return 0;
+                return 0m;
             }
 
-            int espacio = MAX_SALDO - saldo;
-            int toAcredit = Math.Min(espacio, PendienteAcreditar);
+            decimal espacio = MAX_SALDO - saldo;
+            decimal toAcredit = Math.Min(espacio, PendienteAcreditar);
 
             saldo += toAcredit;
             PendienteAcreditar -= toAcredit;
@@ -192,7 +179,7 @@ namespace TrabajoTarjeta2025
         private DateTime fechaActual;
         private readonly Func<DateTime> _now;
 
-        public MedioBoleto(int saldo, int limite, Func<DateTime>? nowProvider = null) : base(saldo, limite)
+        public MedioBoleto(decimal saldo, decimal limite, Func<DateTime>? nowProvider = null) : base(saldo, limite)
         {
             Tipo = TarjetaTipo.Medio;
             ultimoUso = DateTime.MinValue;
@@ -201,10 +188,7 @@ namespace TrabajoTarjeta2025
             fechaActual = _now().Date;
         }
 
-        // Constructor decimal-friendly
-        public MedioBoleto(decimal saldo, decimal limite, Func<DateTime>? nowProvider = null) : this((int)saldo, (int)limite, nowProvider) { }
-
-        public override bool pagar(int precio)
+        public override bool pagar(decimal precio)
         {
             DateTime now = _now();
 
@@ -218,7 +202,7 @@ namespace TrabajoTarjeta2025
             // Verificar el intervalo de 5 minutos
             if (ultimoUso != DateTime.MinValue && (now - ultimoUso).TotalMinutes < 5)
             {
-                LastPagoAmount = 0;
+                LastPagoAmount = 0m;
                 return false;
             }
 
@@ -236,12 +220,10 @@ namespace TrabajoTarjeta2025
 
             viajesDiarios++;
             ultimoUso = now;
-            int precioMedio = precio / 2;
+            decimal precioMedio = Math.Floor(precio / 2m);
             bool r = base.pagar(precioMedio);
             return r;
         }
-
-        public override bool pagar(decimal precio) => pagar((int)precio);
     }
 
     public class BoletoGratuito : Tarjeta
@@ -250,7 +232,7 @@ namespace TrabajoTarjeta2025
         private DateTime fechaActual;
         private readonly Func<DateTime> _now;
 
-        public BoletoGratuito(int saldo, int limite, Func<DateTime>? nowProvider = null) : base(saldo, limite)
+        public BoletoGratuito(decimal saldo, decimal limite, Func<DateTime>? nowProvider = null) : base(saldo, limite)
         {
             Tipo = TarjetaTipo.Educativo;
             viajesGratuitosDiarios = 0;
@@ -258,9 +240,7 @@ namespace TrabajoTarjeta2025
             fechaActual = _now().Date;
         }
 
-        public BoletoGratuito(decimal saldo, decimal limite, Func<DateTime>? nowProvider = null) : this((int)saldo, (int)limite, nowProvider) { }
-
-        public override bool pagar(int precio)
+        public override bool pagar(decimal precio)
         {
             DateTime now = _now();
 
@@ -278,30 +258,24 @@ namespace TrabajoTarjeta2025
             }
 
             viajesGratuitosDiarios++;
-            LastPagoAmount = 0;
+            LastPagoAmount = 0m;
             LastPagoTime = now;
             return true;
         }
-
-        public override bool pagar(decimal precio) => pagar((int)precio);
     }
 
     public class FranquiciaCompleta : Tarjeta
     {
-        public FranquiciaCompleta(int saldo, int limite) : base(saldo, limite)
+        public FranquiciaCompleta(decimal saldo, decimal limite) : base(saldo, limite)
         {
             Tipo = TarjetaTipo.FranquiciaCompleta;
         }
 
-        public FranquiciaCompleta(decimal saldo, decimal limite) : this((int)saldo, (int)limite) { }
-
-        public override bool pagar(int precio)
+        public override bool pagar(decimal precio)
         {
-            LastPagoAmount = 0;
+            LastPagoAmount = 0m;
             LastPagoTime = DateTime.Now;
             return true;
         }
-
-        public override bool pagar(decimal precio) => pagar((int)precio);
     }
 }

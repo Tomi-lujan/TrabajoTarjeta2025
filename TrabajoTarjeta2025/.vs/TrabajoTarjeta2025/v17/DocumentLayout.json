@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\tarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:tarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\boleto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:boleto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\colectivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:colectivo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\boleto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:boleto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025\\tarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E28B1694-E6A1-4018-A64D-C6B284A08DF4}|TrabajoTarjeta2025.csproj|solutionrelative:tarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{36894B29-3411-47F8-B449-DD726C78B37D}|..\\TrabajoTarjeta2025.test\\testTrabajoTarjeta2025.csproj|c:\\users\\mg36\\documents\\github\\trabajotarjeta2025\\trabajotarjeta2025.test\\testtarjeta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -32,7 +32,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
@@ -44,18 +44,17 @@
               "RelativeToolTip": "..\\TrabajoTarjeta2025.test\\testBoleto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAJAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-29T23:17:35.948Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-29T23:17:35.948Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Boleto.cs",
               "DocumentMoniker": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Boleto.cs",
               "RelativeDocumentMoniker": "Boleto.cs",
               "ToolTip": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Boleto.cs",
               "RelativeToolTip": "Boleto.cs",
-              "ViewState": "AgIAAEAAAAAAAAAAAAAAAFEAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAACYAAAAAAAAAAAAtwEIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-09T17:50:13.948Z",
               "EditorCaption": ""
@@ -68,23 +67,21 @@
               "RelativeDocumentMoniker": "Colectivo.cs",
               "ToolTip": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Colectivo.cs",
               "RelativeToolTip": "Colectivo.cs",
-              "ViewState": "AgIAAFUAAAAAAAAAAAAhwG0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAWwFkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-09T17:48:32.978Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-09T17:48:32.978Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Tarjeta.cs",
               "DocumentMoniker": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Tarjeta.cs",
               "RelativeDocumentMoniker": "Tarjeta.cs",
               "ToolTip": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025\\Tarjeta.cs",
               "RelativeToolTip": "Tarjeta.cs",
-              "ViewState": "AgIAACIBAAAAAAAAAAAEwDIBAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAQBAAAAAAAAAAAMwA8BAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-09T17:33:49.042Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-09T17:33:49.042Z"
             },
             {
               "$type": "Document",
@@ -94,10 +91,9 @@
               "RelativeDocumentMoniker": "..\\TrabajoTarjeta2025.test\\testTarjeta.cs",
               "ToolTip": "C:\\Users\\mg36\\Documents\\GitHub\\TrabajoTarjeta2025\\TrabajoTarjeta2025.test\\testTarjeta.cs",
               "RelativeToolTip": "..\\TrabajoTarjeta2025.test\\testTarjeta.cs",
-              "ViewState": "AgIAAGsBAAAAAAAAAAAAAHcBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAOoAAAAAAAAAAAAowGoBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-09T17:26:53.922Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-09T17:26:53.922Z"
             },
             {
               "$type": "Document",
@@ -109,8 +105,7 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-09T17:25:23.096Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-09T17:25:23.096Z"
             }
           ]
         }

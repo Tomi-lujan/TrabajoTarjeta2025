@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 
 namespace TrabajoTarjeta2025
 {
     public class Colectivo
     {
-        private const int DEFAULT_TARIFA = 1580;
+        private const decimal DEFAULT_TARIFA = 1580m;
 
         // Método antiguo para compatibilidad: devuelve solo si el pago se realizó
         public bool pagarCon(Tarjeta tarjeta)
@@ -12,14 +12,14 @@ namespace TrabajoTarjeta2025
             return tarjeta.pagar(DEFAULT_TARIFA);
         }
 
-        // EmitirBoleto con tarifa entera
-        public Boleto? EmitirBoleto(Tarjeta tarjeta, int linea, int tarifa = DEFAULT_TARIFA, Func<DateTime>? nowProvider = null)
+        // Nuevo método: intenta emitir un boleto y devuelve el objeto Boleto (null si falla el pago)
+        public Boleto? EmitirBoleto(Tarjeta tarjeta, int linea, decimal tarifa = DEFAULT_TARIFA, Func<DateTime>? nowProvider = null)
         {
             DateTime now = (nowProvider ?? (() => DateTime.Now))();
 
             bool esTrasbordo = false;
             bool trasbordoPagado = false;
-            int montoCobrado = 0;
+            decimal montoCobrado = 0m;
 
             // Verificar si existe ventana de trasbordo activa para la tarjeta
             bool ventanaActiva = tarjeta.TransferWindowStart.HasValue &&
@@ -32,20 +32,20 @@ namespace TrabajoTarjeta2025
                 // Trasbordo libre: monto 0
                 esTrasbordo = true;
                 // Aún así respetamos reglas de la tarjeta (por ejemplo medio boleto 5 minutos)
-                bool res = tarjeta.pagar(0);
+                bool res = tarjeta.pagar(0m);
                 if (!res)
                 {
                     return null;
                 }
                 montoCobrado = tarjeta.LastPagoAmount;
-                trasbordoPagado = montoCobrado > 0;
+                trasbordoPagado = montoCobrado > 0m;
             }
             else
             {
                 // No es trasbordo libre: calcular monto según tipo y beneficios de uso frecuente (solo tarjetas normales)
                 if (tarjeta.Tipo == TarjetaTipo.Normal)
                 {
-                    int montoConDescuento = tarjeta.CalcularTarifaConDescuento(tarifa, now);
+                    decimal montoConDescuento = tarjeta.CalcularTarifaConDescuento(tarifa, now);
                     bool pagoOk = tarjeta.pagar(montoConDescuento);
                     if (!pagoOk)
                     {
@@ -65,36 +65,32 @@ namespace TrabajoTarjeta2025
                 }
 
                 // Abrir o reiniciar ventana de trasbordo desde este boleto si se pagó (montoCobrado > 0)
-                if (montoCobrado > 0)
+                if (montoCobrado > 0m)
                 {
                     tarjeta.TransferWindowStart = now;
                     tarjeta.TransferBaseLine = linea;
                 }
             }
 
-            int montoExtra = Math.Max(0, montoCobrado - tarifa);
+            decimal montoExtra = Math.Max(0m, montoCobrado - tarifa);
 
-            // Construir boleto con la info pedida (Linea e Id como strings para compatibilidad con tests)
+            // Construir boleto con la info pedida (Linea como string para compatibilidad con tests de Boleto)
             var boleto = new Boleto(
                 fecha: now,
                 tipoTarjeta: tarjeta.Tipo.ToString(),
                 linea: linea.ToString(),
                 precioNormal: tarifa,
                 totalAbonado: montoCobrado,
-                saldoPrevio: 0, // no requerido aquí
+                saldo: 0m, // saldo previo no requerido aquí
                 saldoRestante: tarjeta.verSaldo(),
                 idTarjeta: tarjeta.Id.ToString(),
-                montoExtra: montoExtra,
+                montoExtra: (int)montoExtra,
                 esTrasbordo: esTrasbordo,
                 trasbordoPagado: trasbordoPagado
             );
 
             return boleto;
         }
-
-        // Sobrecarga para aceptar decimal tarifa en tests si fuese llamado así
-        public Boleto? EmitirBoleto(Tarjeta tarjeta, int linea, decimal tarifa, Func<DateTime>? nowProvider = null)
-            => EmitirBoleto(tarjeta, linea, (int)tarifa, nowProvider);
 
         private bool IsHorarioTrasbordoPermitido(DateTime now)
         {

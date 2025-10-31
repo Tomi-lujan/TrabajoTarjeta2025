@@ -1,0 +1,5 @@
+C:\Users\leanz\OneDrive\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net5.0\TrabajoTarjeta2025.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\leanz\OneDrive\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net5.0\TrabajoTarjeta2025.AssemblyInfoInputs.cache
+C:\Users\leanz\OneDrive\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net5.0\TrabajoTarjeta2025.AssemblyInfo.cs
+C:\Users\leanz\OneDrive\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net5.0\TrabajoTarjeta2025.csproj.CoreCompileInputs.cache
+C:\Users\leanz\OneDrive\Documents\GitHub\TrabajoTarjeta2025\TrabajoTarjeta2025\obj\Debug\net5.0\TrabajoTarjeta2025.sourcelink.json
