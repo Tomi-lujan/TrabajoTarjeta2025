@@ -85,6 +85,20 @@ namespace TrabajoTarjeta2025
             sb.AppendLine($"Saldo previo: {SaldoPrevio}");
             sb.AppendLine($"Total abonado: {TotalAbonado}");
             sb.AppendLine($"Saldo restante: {SaldoRestante}");
+
+            // AGREGAR ESTA PARTE PARA MOSTRAR INFORMACIÓN DE TRASBORDO
+            if (IsTrasbordo)
+            {
+                if (TrasbordoPagado)
+                {
+                    sb.AppendLine("TRASBORDO PAGADO");
+                }
+                else
+                {
+                    sb.AppendLine("TRASBORDO LIBRE");
+                }
+            }
+
             if (SaldoPrevio < 0m)
             {
                 sb.AppendLine("Nota: Se abonó deuda previa.");

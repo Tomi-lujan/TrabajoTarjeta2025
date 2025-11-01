@@ -1,10 +1,33 @@
 using System;
+using System.Collections.Generic;
 
 namespace TrabajoTarjeta2025
 {
     public class Colectivo
     {
         private const decimal DEFAULT_TARIFA = 1580m;
+        private const decimal INTERURBAN_TARIFA = 3000m;
+
+        private readonly HashSet<int> _interurbanLines = new HashSet<int>();
+
+        // Constructor opcional que permite registrar líneas interurbanas desde el inicio
+        public Colectivo(IEnumerable<int>? interurbanLines = null)
+        {
+            if (interurbanLines != null)
+            {
+                foreach (var l in interurbanLines)
+                {
+                    _interurbanLines.Add(l);
+                }
+            }
+        }
+
+        // Permite añadir o quitar líneas interurbanas en tiempo de ejecución (útil para tests)
+        public void AddInterurbanLine(int linea) => _interurbanLines.Add(linea);
+        public bool RemoveInterurbanLine(int linea) => _interurbanLines.Remove(linea);
+        public bool IsInterurbanLine(int linea) => _interurbanLines.Contains(linea);
+
+        private const decimal UNUSED = 0m;
 
         // Método antiguo para compatibilidad: devuelve solo si el pago se realizó
         public bool pagarCon(Tarjeta tarjeta)
@@ -17,21 +40,26 @@ namespace TrabajoTarjeta2025
         {
             DateTime now = (nowProvider ?? (() => DateTime.Now))();
 
+            // Guardar saldo previo antes de intentar el pago
+            decimal saldoPrevio = tarjeta.verSaldo();
+
             bool esTrasbordo = false;
             bool trasbordoPagado = false;
             decimal montoCobrado = 0m;
 
-            // Verificar si existe ventana de trasbordo activa para la tarjeta
+            // Ventana de trasbordo activa (<= 1 hora desde TransferWindowStart)
             bool ventanaActiva = tarjeta.TransferWindowStart.HasValue &&
                                  (now - tarjeta.TransferWindowStart.Value).TotalHours <= 1.0;
 
             bool horarioPermitido = IsHorarioTrasbordoPermitido(now);
 
+            bool isInterurban = IsInterurbanLine(linea);
+            decimal tarifaEf = isInterurban ? INTERURBAN_TARIFA : tarifa;
+
             if (ventanaActiva && horarioPermitido && tarjeta.TransferBaseLine.HasValue && tarjeta.TransferBaseLine.Value != linea)
             {
-                // Trasbordo libre: monto 0
+                // Trasbordo libre: monto 0 (pero respetar reglas de la tarjeta)
                 esTrasbordo = true;
-                // Aún así respetamos reglas de la tarjeta (por ejemplo medio boleto 5 minutos)
                 bool res = tarjeta.pagar(0m);
                 if (!res)
                 {
@@ -42,29 +70,22 @@ namespace TrabajoTarjeta2025
             }
             else
             {
-                // No es trasbordo libre: calcular monto según tipo y beneficios de uso frecuente (solo tarjetas normales)
+                // No es trasbordo libre: calcular monto según tipo y beneficios
                 if (tarjeta.Tipo == TarjetaTipo.Normal)
                 {
-                    decimal montoConDescuento = tarjeta.CalcularTarifaConDescuento(tarifa, now);
+                    decimal montoConDescuento = tarjeta.CalcularTarifaConDescuento(tarifaEf, now);
                     bool pagoOk = tarjeta.pagar(montoConDescuento);
-                    if (!pagoOk)
-                    {
-                        return null;
-                    }
+                    if (!pagoOk) return null;
                     montoCobrado = tarjeta.LastPagoAmount;
                 }
                 else
                 {
-                    // Para otras tarjetas delegamos en su pagar (MedioBoleto, Gratuito, FranquiciaCompleta)
-                    bool pagoOk = tarjeta.pagar(tarifa);
-                    if (!pagoOk)
-                    {
-                        return null;
-                    }
+                    bool pagoOk = tarjeta.pagar(tarifaEf);
+                    if (!pagoOk) return null;
                     montoCobrado = tarjeta.LastPagoAmount;
                 }
 
-                // Abrir o reiniciar ventana de trasbordo desde este boleto si se pagó (montoCobrado > 0)
+                // Abrir/reiniciar ventana de trasbordo si se cobró
                 if (montoCobrado > 0m)
                 {
                     tarjeta.TransferWindowStart = now;
@@ -72,34 +93,32 @@ namespace TrabajoTarjeta2025
                 }
             }
 
-            decimal montoExtra = Math.Max(0m, montoCobrado - tarifa);
-
-            // Construir boleto con la info pedida (Linea como string para compatibilidad con tests de Boleto)
+            int montoExtra = 0;
             var boleto = new Boleto(
-                fecha: now,
-                tipoTarjeta: tarjeta.Tipo.ToString(),
-                linea: linea.ToString(),
-                precioNormal: tarifa,
-                totalAbonado: montoCobrado,
-                saldo: 0m, // saldo previo no requerido aquí
-                saldoRestante: tarjeta.verSaldo(),
-                idTarjeta: tarjeta.Id.ToString(),
-                montoExtra: (int)montoExtra,
-                esTrasbordo: esTrasbordo,
-                trasbordoPagado: trasbordoPagado
+                now,
+                tarjeta.Tipo.ToString(),
+                linea.ToString(),
+                tarifaEf,                   // Precio normal (usa tarifa interurbana si corresponde)
+                montoCobrado,
+                saldoPrevio,
+                tarjeta.verSaldo(),
+                tarjeta.Id.ToString(),
+                montoExtra,
+                esTrasbordo,
+                trasbordoPagado
             );
 
             return boleto;
         }
 
-        private bool IsHorarioTrasbordoPermitido(DateTime now)
+        // Horario permitido para trasbordo (mismo criterio que franquicias)
+        private static bool IsHorarioTrasbordoPermitido(DateTime now)
         {
-            // Trasbordos se pueden realizar de lunes a sábado de 7:00 a 22:00.
-            DayOfWeek d = now.DayOfWeek;
-            bool diaValido = d >= DayOfWeek.Monday && d <= DayOfWeek.Saturday;
-            TimeSpan t = now.TimeOfDay;
-            bool horaValida = t >= TimeSpan.FromHours(7) && t < TimeSpan.FromHours(22);
-            return diaValido && horaValida;
+            var dayOk = now.DayOfWeek >= DayOfWeek.Monday && now.DayOfWeek <= DayOfWeek.Friday;
+            var time = now.TimeOfDay;
+            var start = TimeSpan.FromHours(6);
+            var end = TimeSpan.FromHours(22);
+            return dayOk && time >= start && time <= end;
         }
     }
 }

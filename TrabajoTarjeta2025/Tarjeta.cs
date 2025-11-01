@@ -104,15 +104,28 @@ namespace TrabajoTarjeta2025
 
         public virtual bool pagar(decimal precio)
         {
-            if (saldo - precio < limiteMaximo)
+            return pagar(precio, DateTime.Now);
+        }
+
+        public virtual bool pagar(decimal precio, DateTime now)
+        {
+            decimal tarifaFinal = precio;
+
+            // Aplicar descuento de uso frecuente solo para tarjetas normales
+            if (Tipo == TarjetaTipo.Normal)
+            {
+                tarifaFinal = CalcularTarifaConDescuento(precio, now);
+            }
+
+            if (saldo - tarifaFinal < limiteMaximo)
             {
                 LastPagoAmount = 0m;
                 return false;
             }
 
-            saldo -= precio;
-            LastPagoAmount = precio;
-            LastPagoTime = DateTime.Now;
+            saldo -= tarifaFinal;
+            LastPagoAmount = tarifaFinal;
+            LastPagoTime = now;
 
             AcreditarCarga();
 
@@ -170,6 +183,16 @@ namespace TrabajoTarjeta2025
 
             return toAcredit;
         }
+
+        // Nueva comprobación de franja horaria para franquicias (lun-vie 06:00..22:00)
+        protected static bool IsWithinFranchiseWindow(DateTime now)
+        {
+            var dayOk = now.DayOfWeek >= DayOfWeek.Monday && now.DayOfWeek <= DayOfWeek.Friday;
+            var time = now.TimeOfDay;
+            var start = TimeSpan.FromHours(6);
+            var end = TimeSpan.FromHours(22); // inclusivo 22:00:00
+            return dayOk && time >= start && time <= end;
+        }
     }
 
     public class MedioBoleto : Tarjeta
@@ -191,6 +214,13 @@ namespace TrabajoTarjeta2025
         public override bool pagar(decimal precio)
         {
             DateTime now = _now();
+
+            // Comprobar franja horaria
+            if (!IsWithinFranchiseWindow(now))
+            {
+                LastPagoAmount = 0m;
+                return false;
+            }
 
             // Resetear contador si es un nuevo día
             if (now.Date != fechaActual.Date)
@@ -244,6 +274,13 @@ namespace TrabajoTarjeta2025
         {
             DateTime now = _now();
 
+            // Comprobar franja horaria
+            if (!IsWithinFranchiseWindow(now))
+            {
+                LastPagoAmount = 0m;
+                return false;
+            }
+
             // Resetear contador si es un nuevo día
             if (now.Date != fechaActual.Date)
             {
@@ -266,15 +303,27 @@ namespace TrabajoTarjeta2025
 
     public class FranquiciaCompleta : Tarjeta
     {
-        public FranquiciaCompleta(decimal saldo, decimal limite) : base(saldo, limite)
+        private readonly Func<DateTime> _now;
+
+        // Ahora inyectable para permitir pruebas deterministas
+        public FranquiciaCompleta(decimal saldo, decimal limite, Func<DateTime>? nowProvider = null) : base(saldo, limite)
         {
             Tipo = TarjetaTipo.FranquiciaCompleta;
+            _now = nowProvider ?? (() => DateTime.Now);
         }
 
         public override bool pagar(decimal precio)
         {
+            DateTime now = _now();
+
+            if (!IsWithinFranchiseWindow(now))
+            {
+                LastPagoAmount = 0m;
+                return false;
+            }
+
             LastPagoAmount = 0m;
-            LastPagoTime = DateTime.Now;
+            LastPagoTime = now;
             return true;
         }
     }
