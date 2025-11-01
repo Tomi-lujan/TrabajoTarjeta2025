@@ -83,4 +83,59 @@ Una tarjeta SUBE no puede almacenar más de 56000 pesos. Por lo tanto cuando se 
 - Crear el metodo AcreditarCarga.
 - Modificar la función para cargar la tarjeta añadiendo esta funcionalidad.
 - Escribir un test que valide que si a una tarjeta se le carga un monto que supere el máximo permitido, se acredite el saldo hasta alcanzar el máximo(56000) y que el excedente quede almacenado y pendiente de acreditación.
+
+## Iteración 4
+
+### Boleto de uso frecuente
+
+Las tarjetas SUBE cuentan con el boleto de uso frecuente. Este es un beneficio que aplica un descuento al monto del boleto dependiendo de cuántos viajes se hagan.
+
+- Del viaje 1 al 29: Tarifa normal.
+- Del viaje 30 al 59: 20% de descuento.
+- Del viaje 60 al 80: 25% de descuento.
+- Del viaje 81 en adelante: Tarifa normal.
+
+<br>
+
+La cantidad de viajes se cuenta del primer al último día de cada mes. Este beneficio se aplicará *sólo* sobre las tarjetas normales.
+
+- Implementar esta nueva funcionalidad.
+- Escribir los tests correspondientes para validar el correcto funcionamiento del código.
+
+### Franquicias
+
+Todas las franquicias (medio boleto estudiantil, jubilado, medio boleto universitario y boleto educativo gratuito) solo pueden utilizarse en una determinada franja horaria:
+
+- Lunes a viernes de 6 a 22.
+
+Fuera de este intervalo de tiempo no es posible pagar con ninguna de estas franquicias.
+
+- Escribir tests que validen que no se puedan realizar viajes fuera de la franja horaria y/o días correspondientes.
+
+### Líneas interurbanas
+
+En nuestra ciudad existen diversas líneas de colectivo. Algunas solo viajan dentro de la ciudad pero otras van hacia la zona metropolitana de Rosario (ej: Gálvez, Baigorria). Estas líneas tienen otra tarifa.
+
+- Implementar las líneas de colectivo interurbanas.
+- La tarifa interurbana es de: $3000.
+
+Las líneas de colectivo interurbanas admiten todas las franquicias y siguen los mismos criterios que las líneas de colectivo urbanas.
+
+### Trasbordos
+
+Un usuario de la tarjeta SUBE puede realizar trasbordos entre colectivos sin costo de acuerdo a las siguientes condiciones:
+
+- El usuario puede realizar trasbordos sin límite en un plazo de 1 hora desde que se pagó el primer boleto, pero el trasbordo debe ser entre líneas distintas.
+- Los trasbordos se pueden realizar de lunes a sábado de 7:00 a 22:00.
+- Todas las tarjetas pueden realizar trasbordos.
+- Cuando se paga un trasbordo se indica también en el boleto.
+
+## Fecha de Entrega (Tentativa): Viernes 31/10
+
+Para la entrega se pide y se va a considerar:
+
+- Todas las iteraciones completas.
+- Un mínimo de 85% de cobertura de código.
+- El correcto funcionamiento del código.
+- Uso de Git.
 - Escribir un test que valide que luego de realizar un viaje, verifique si hay saldo pendiente de acreditación y recargue la tarjeta hasta llegar al máximo nuevamente.
