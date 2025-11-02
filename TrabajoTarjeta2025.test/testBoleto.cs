@@ -38,6 +38,152 @@ namespace testTrabajoTarjeta2025
         }
 
         [Test]
+        public void Boleto_ConstructorConTrasbordo_PropiedadesCorrectas()
+        {
+            // Test del constructor principal con parámetros de trasbordo
+            var fecha = DateTime.Now;
+            var boleto = new Boleto(
+                fecha: fecha,
+                tipoTarjeta: "Normal",
+                linea: "L1",
+                precioNormal: 100m,
+                totalAbonado: 50m,
+                saldo: 100m,
+                saldoRestante: 50m,
+                idTarjeta: "T-001",
+                montoExtra: 10,
+                esTrasbordo: true,
+                trasbordoPagado: true
+            );
+
+            Assert.That(boleto.Fecha, Is.EqualTo(fecha));
+            Assert.That(boleto.TipoTarjeta, Is.EqualTo("Normal"));
+            Assert.That(boleto.Linea, Is.EqualTo("L1"));
+            Assert.That(boleto.PrecioNormal, Is.EqualTo(100m));
+            Assert.That(boleto.TotalAbonado, Is.EqualTo(50m));
+            Assert.That(boleto.SaldoPrevio, Is.EqualTo(100m));
+            Assert.That(boleto.SaldoRestante, Is.EqualTo(50m));
+            Assert.That(boleto.IdTarjeta, Is.EqualTo("T-001"));
+            Assert.That(boleto.MontoExtra, Is.EqualTo(10));
+            Assert.That(boleto.IsTrasbordo, Is.True);
+            Assert.That(boleto.TrasbordoPagado, Is.True);
+        }
+
+        [Test]
+        public void ProcesarPago_SaldoPositivoMenorQueTarifa_CalculaCorrectamente()
+        {
+            // Caso específico: saldo positivo pero insuficiente
+            var boleto = CreateBoleto(
+                precioNormal: 100m,
+                totalAbonado: 0m,
+                saldo: 20m,           // Saldo menor que tarifa
+                idTarjeta: "T005"
+            );
+
+            boleto.ProcesarPago(30m); // Tarifa mayor que saldo
+
+            // Según tu implementación actual:
+            // TotalAbonado = tarifa (30m)
+            // SaldoRestante = 20m - 30m = -10m
+            Assert.That(boleto.TotalAbonado, Is.EqualTo(30m));
+            Assert.That(boleto.SaldoRestante, Is.EqualTo(-10m));
+        }
+
+        [Test]
+        public void ProcesarPago_SaldoCero_GeneraDeuda()
+        {
+            var boleto = CreateBoleto(
+                precioNormal: 100m,
+                totalAbonado: 0m,
+                saldo: 0m,            // Saldo cero
+                idTarjeta: "T006"
+            );
+
+            boleto.ProcesarPago(25m);
+
+            Assert.That(boleto.TotalAbonado, Is.EqualTo(25m));
+            Assert.That(boleto.SaldoRestante, Is.EqualTo(-25m));
+        }
+
+        [Test]
+        public void Informe_ConTrasbordoPagado_MuestraCorrectamente()
+        {
+            var boleto = CreateBoleto(
+                tipoTarjeta: "Normal",
+                linea: "L1",
+                precioNormal: 100m,
+                totalAbonado: 50m,
+                saldo: 100m,
+                saldoRestante: 50m,
+                idTarjeta: "T-007",
+                isTrasbordo: true,
+                trasbordoPagado: true  // Trasbordo PAGADO (no libre)
+            );
+
+            var informe = boleto.Informe();
+
+            Assert.That(informe, Does.Contain("TRASBORDO PAGADO"));
+            Assert.That(informe, Does.Not.Contain("TRASBORDO LIBRE"));
+        }
+
+        [Test]
+        public void Informe_ConTrasbordoLibre_MuestraCorrectamente()
+        {
+            var boleto = CreateBoleto(
+                tipoTarjeta: "Normal",
+                linea: "L1",
+                precioNormal: 100m,
+                totalAbonado: 0m,
+                saldo: 100m,
+                saldoRestante: 100m,
+                idTarjeta: "T-008",
+                isTrasbordo: true,
+                trasbordoPagado: false  // Trasbordo LIBRE
+            );
+
+            var informe = boleto.Informe();
+
+            Assert.That(informe, Does.Contain("TRASBORDO LIBRE"));
+            Assert.That(informe, Does.Not.Contain("TRASBORDO PAGADO"));
+        }
+
+        [Test]
+        public void Informe_ConMontoExtra_YNotaDeuda()
+        {
+            var boleto = CreateBoleto(
+                tipoTarjeta: "Normal",
+                linea: "L1",
+                precioNormal: 100m,
+                totalAbonado: 35m,
+                saldo: -10m,           // Tenía deuda
+                saldoRestante: 0m,
+                idTarjeta: "T-009",
+                montoExtra: 5          // Monto extra
+            );
+
+            var informe = boleto.Informe();
+
+            Assert.That(informe, Does.Contain("Nota: Se abonó deuda previa."));
+            // El monto extra se muestra implícitamente en el informe
+        }
+
+        [Test]
+        public void ProcesarPago_TarifaCero_NoCambiaSaldos()
+        {
+            var boleto = CreateBoleto(
+                precioNormal: 100m,
+                totalAbonado: 0m,
+                saldo: 50m,
+                idTarjeta: "T010"
+            );
+
+            boleto.ProcesarPago(0m);
+
+            Assert.That(boleto.TotalAbonado, Is.EqualTo(0m));
+            Assert.That(boleto.SaldoRestante, Is.EqualTo(50m));
+        }
+
+        [Test]
         public void ProcesarPago_SaldoPositivo_RestaCorrectaYTotalAbonado()
         {
             var fecha = DateTime.Now;
