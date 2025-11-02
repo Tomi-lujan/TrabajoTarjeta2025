@@ -465,9 +465,9 @@ namespace testTrabajoTarjeta2025
             tarjeta.pagar(1000); // Saldo: 56000 - 1000 = 55000
 
         }
-            // ========== TESTS DE USO FRECUENTE ==========
+        // ========== TESTS DE USO FRECUENTE ==========
 
-            [Test]
+        [Test]
         public void TestUsoFrecuente_Tramo30_20porciento()
         {
             DateTime now = new DateTime(2025, 10, 1, 9, 0, 0);
@@ -730,6 +730,230 @@ namespace testTrabajoTarjeta2025
 
             Assert.That(tarjeta.verSaldo(), Is.EqualTo(56000m));
             Assert.That(tarjeta.PendienteAcreditar, Is.EqualTo(7000m));
+        }
+        // ========== TESTS PARA AUMENTAR COVERAGE - CASOS BORDE Y COMBINACIONES ==========
+
+        [Test]
+        public void TestTrasbordo_ExactamenteEnLimite60Minutos_DeberiaSerLibre()
+        {
+            DateTime current = new DateTime(2025, 10, 13, 10, 0, 0); // Lunes
+            var colectivo = new Colectivo();
+            var tarjeta = new Tarjeta(10000m, 40000m);
+
+            // Primer boleto
+            var b1 = colectivo.EmitirBoleto(tarjeta, linea: 1, tarifa: 1000m, () => current);
+            Assert.That(b1, Is.Not.Null);
+
+            // Exactamente en el límite de 60 minutos
+            current = current.AddMinutes(60);
+            var b2 = colectivo.EmitirBoleto(tarjeta, linea: 2, tarifa: 1000m, () => current);
+
+            Assert.That(b2, Is.Not.Null);
+            Assert.That(b2!.IsTrasbordo, Is.True, "Debería ser trasbordo en exactamente 60 minutos");
+            Assert.That(b2.TotalAbonado, Is.EqualTo(0m));
+        }
+
+        [Test]
+        public void TestTrasbordo_UnSegundoDespuesDe60Minutos_NoDeberiaSerLibre()
+        {
+            DateTime current = new DateTime(2025, 10, 13, 10, 0, 0);
+            var colectivo = new Colectivo();
+            var tarjeta = new Tarjeta(10000m, 40000m);
+
+            var b1 = colectivo.EmitirBoleto(tarjeta, linea: 1, tarifa: 1000m, () => current);
+            Assert.That(b1, Is.Not.Null);
+
+            // 60 minutos y 1 segundo - fuera de ventana
+            current = current.AddMinutes(60).AddSeconds(1);
+            var b2 = colectivo.EmitirBoleto(tarjeta, linea: 2, tarifa: 1000m, () => current);
+
+            Assert.That(b2, Is.Not.Null);
+            Assert.That(b2!.IsTrasbordo, Is.False, "No debería ser trasbordo después de 60 minutos");
+            Assert.That(b2.TotalAbonado, Is.EqualTo(1000m));
+        }
+
+        [Test]
+        public void TestFranjaHoraria_LimitesExactos_Inclusivo()
+        {
+            // Test límite inferior exacto (6:00:00)
+            var limiteInferior = new DateTime(2024, 1, 1, 6, 0, 0); // Lunes 6:00 exacto
+            var tarjetaMedio = new MedioBoleto(1000m, -1200m, () => limiteInferior);
+            Assert.That(tarjetaMedio.pagar(100m), Is.True, "Debería permitir en 6:00:00 exacto");
+
+            // Test límite superior exacto (22:00:00)
+            var limiteSuperior = new DateTime(2024, 1, 1, 22, 0, 0); // Lunes 22:00 exacto
+            var tarjetaGratuito = new BoletoGratuito(1000m, -1200m, () => limiteSuperior);
+            Assert.That(tarjetaGratuito.pagar(100m), Is.True, "Debería permitir en 22:00:00 exacto");
+        }
+
+        [Test]
+        public void TestUsoFrecuente_Viaje29_SinDescuento_Viaje30_ConDescuento()
+        {
+            DateTime now = new DateTime(2025, 10, 1, 9, 0, 0);
+            var tarjeta = new Tarjeta(100000m, 200000m);
+
+            // Viaje 29 - sin descuento
+            for (int i = 1; i <= 28; i++)
+            {
+                tarjeta.pagar(1000m, now.AddMinutes(i * 10));
+            }
+
+            // Viaje 29 - verificar que no tiene descuento
+            tarjeta.pagar(1000m, now.AddMinutes(290));
+            Assert.That(tarjeta.LastPagoAmount, Is.EqualTo(1000m), "Viaje 29 debería ser sin descuento");
+
+            // Viaje 30 - con descuento del 20%
+            tarjeta.pagar(1000m, now.AddMinutes(300));
+            Assert.That(tarjeta.LastPagoAmount, Is.EqualTo(800m), "Viaje 30 debería tener 20% descuento");
+        }
+
+        [Test]
+        public void TestMedioBoleto_IntervaloExacto5Minutos_PermiteViajar()
+        {
+            DateTime current = new DateTime(2025, 10, 13, 10, 0, 0);
+            var medio = new MedioBoleto(10000, 40000, () => current);
+
+            // Primer viaje
+            bool r1 = medio.pagar(1580);
+            Assert.That(r1, Is.True);
+
+            // Exactamente 5 minutos después - debería permitir
+            current = current.AddMinutes(5);
+            bool r2 = medio.pagar(1580);
+
+            Assert.That(r2, Is.True, "Debería permitir viajar exactamente a los 5 minutos");
+            Assert.That(medio.LastPagoAmount, Is.EqualTo(790m));
+        }
+
+        [Test]
+        public void TestBoletoGratuito_TercerViajeMismoDia_PagaCompleto_CuartoViajeSiguePagandoCompleto()
+        {
+            DateTime current = new DateTime(2025, 10, 13, 9, 0, 0);
+            var gratuito = new BoletoGratuito(10000, 40000, () => current);
+
+            // Dos viajes gratuitos
+            gratuito.pagar(1580);
+            current = current.AddMinutes(10);
+            gratuito.pagar(1580);
+
+            // Tercer viaje - paga completo
+            current = current.AddMinutes(10);
+            gratuito.pagar(1580);
+            Assert.That(gratuito.LastPagoAmount, Is.EqualTo(1580m), "Tercer viaje debería pagar completo");
+
+            // Cuarto viaje - sigue pagando completo
+            current = current.AddMinutes(10);
+            gratuito.pagar(1580);
+            Assert.That(gratuito.LastPagoAmount, Is.EqualTo(1580m), "Cuarto viaje debería seguir pagando completo");
+
+            decimal saldoEsperado = 10000m - 1580m - 1580m;
+            Assert.That(gratuito.verSaldo(), Is.EqualTo(saldoEsperado));
+        }
+
+        [Test]
+        public void TestColectivo_EmitirBoleto_ConTarjetaSinSaldoSuficiente_DevuelveNull()
+        {
+            var colectivo = new Colectivo();
+            DateTime now = new DateTime(2025, 10, 13, 10, 0, 0);
+
+            // Tarjeta con saldo muy bajo y límite máximo
+            var tarjeta = new Tarjeta(1000m, -1200m); // Solo puede pagar hasta 2200
+
+            // Intentar pagar tarifa que supera el límite
+            var boleto = colectivo.EmitirBoleto(tarjeta, linea: 123, tarifa: 2500m, () => now);
+
+            Assert.That(boleto, Is.Null, "No debería emitir boleto cuando supera el límite máximo");
+            Assert.That(tarjeta.verSaldo(), Is.EqualTo(1000m), "Saldo no debería cambiar");
+        }
+
+        [Test]
+        public void TestTrasbordo_ConMedioBoleto_DentroFranja_DeberiaFuncionar()
+        {
+            DateTime current = new DateTime(2025, 10, 13, 10, 0, 0); // Lunes
+            var colectivo = new Colectivo();
+            var medioBoleto = new MedioBoleto(10000m, 40000m, () => current);
+
+            // Primer boleto - medio boleto
+            var b1 = colectivo.EmitirBoleto(medioBoleto, linea: 1, tarifa: 1580m, () => current);
+            Assert.That(b1, Is.Not.Null);
+            Assert.That(b1!.TotalAbonado, Is.EqualTo(790m)); // Medio boleto
+
+            // Segundo boleto dentro de ventana - trasbordo libre
+            current = current.AddMinutes(30);
+            var b2 = colectivo.EmitirBoleto(medioBoleto, linea: 2, tarifa: 1580m, () => current);
+
+            Assert.That(b2, Is.Not.Null);
+            Assert.That(b2!.IsTrasbordo, Is.True);
+            Assert.That(b2.TotalAbonado, Is.EqualTo(0m)); // Libre
+        }
+
+        [Test]
+        public void TestCalcularTarifaConDescuento_FueraDeTramos_RetornaTarifaNormal()
+        {
+            DateTime now = new DateTime(2025, 10, 1, 9, 0, 0);
+            var tarjeta = new Tarjeta(100000m, 200000m);
+
+            // Viajes 1-29 sin descuento
+            for (int i = 1; i <= 29; i++)
+            {
+                decimal tarifa = tarjeta.CalcularTarifaConDescuento(1000m, now.AddMinutes(i * 10));
+                if (i < 30)
+                {
+                    Assert.That(tarifa, Is.EqualTo(1000m), $"Viaje {i} debería ser tarifa normal");
+                }
+            }
+        }
+
+        [Test]
+        public void TestTransferWindow_SeResetea_SiPrimerViajeNoCobra()
+        {
+            DateTime current = new DateTime(2025, 10, 13, 10, 0, 0);
+            var colectivo = new Colectivo();
+            var franquicia = new FranquiciaCompleta(10000m, 40000m, () => current);
+
+            // Primer viaje - gratuito (no cobra)
+            var b1 = colectivo.EmitirBoleto(franquicia, linea: 1, tarifa: 1580m, () => current);
+            Assert.That(b1, Is.Not.Null);
+            Assert.That(b1!.TotalAbonado, Is.EqualTo(0m));
+
+            // Como no se cobró, no debería establecer ventana de trasbordo
+            Assert.That(franquicia.TransferWindowStart, Is.Null,
+                "No debería establecer ventana si no se cobró en el primer viaje");
+            Assert.That(franquicia.TransferBaseLine, Is.Null);
+
+            // Segundo viaje - tampoco debería ser trasbordo
+            current = current.AddMinutes(30);
+            var b2 = colectivo.EmitirBoleto(franquicia, linea: 2, tarifa: 1580m, () => current);
+
+            Assert.That(b2, Is.Not.Null);
+            Assert.That(b2!.IsTrasbordo, Is.False, "No debería ser trasbordo si no hubo pago inicial");
+            Assert.That(b2.TotalAbonado, Is.EqualTo(0m));
+        }
+
+        [Test]
+        public void TestRecarga_MontosAceptados_Individualmente()
+        {
+            decimal[] montosValidos = { 2000m, 3000m, 4000m, 5000m, 8000m, 10000m, 15000m, 20000m, 25000m, 30000m };
+
+            foreach (decimal monto in montosValidos)
+            {
+                var tarjeta = new Tarjeta(0m, 50000m);
+                decimal resultado = tarjeta.recargar(monto);
+                Assert.That(resultado, Is.EqualTo(monto), $"Fallo con monto: {monto}");
+            }
+        }
+
+        [Test]
+        public void TestRecarga_MontosNoAceptados_DevuelveCero()
+        {
+            decimal[] montosInvalidos = { 0m, 100m, 500m, 1000m, 1234m, 6000m, 7000m, 9000m, 12000m };
+
+            foreach (decimal monto in montosInvalidos)
+            {
+                var tarjeta = new Tarjeta(10000m, 40000m);
+                decimal resultado = tarjeta.recargar(monto);
+                Assert.That(resultado, Is.EqualTo(0m), $"Debería rechazar monto: {monto}");
+            }
         }
     }
 }
